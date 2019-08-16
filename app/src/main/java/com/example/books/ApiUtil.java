@@ -1,5 +1,7 @@
 package com.example.books;
 
+import android.app.DownloadManager;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.IOException;
@@ -13,11 +15,16 @@ public class ApiUtil {
 
     public static final String BASE_API_URI =
             "https://www.googleapis.com/books/v1/volumes";
+    public static final String QUERY_PARAMETER_KEY = "q";
     public  static URL buildUrl(String title){
-        String fullUrl = BASE_API_URI + "?q=" + title;
+
         URL url = null;
+        Uri uri = Uri.parse(BASE_API_URI).buildUpon()
+                .appendQueryParameter(QUERY_PARAMETER_KEY, title)
+                .build();
         try {
-            url = new URL(fullUrl);
+            url = new URL(uri.toString());
+
         }
         catch (Exception e) {
 
