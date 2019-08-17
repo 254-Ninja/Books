@@ -16,11 +16,15 @@ public class ApiUtil {
     public static final String BASE_API_URI =
             "https://www.googleapis.com/books/v1/volumes";
     public static final String QUERY_PARAMETER_KEY = "q";
+    public static final String KEY = "key";
+    public static final String Api_KEY = "AIzaSyDub_wda5wBhI3-rxxLozlCQVikq3z0ngA";
+
     public  static URL buildUrl(String title){
 
         URL url = null;
         Uri uri = Uri.parse(BASE_API_URI).buildUpon()
                 .appendQueryParameter(QUERY_PARAMETER_KEY, title)
+                .appendQueryParameter(KEY, Api_KEY)
                 .build();
         try {
             url = new URL(uri.toString());
