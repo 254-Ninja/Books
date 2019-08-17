@@ -88,6 +88,14 @@ public class ApiUtil {
                 for (int j=0; j<authorNum;j++) {
                     authors[j] = volumeInfoJSON.getJSONArray(AUTHORS).get(j).toString();
                 }
+                Book book = new Book(
+                        (String) bookJSON.get(ID),
+                        volumeInfoJSON.getString(TITLE),
+                        (volumeInfoJSON.isNull(SUBTITLE)?"":volumeInfoJSON.getString(SUBTITLE)),
+                        authors,
+                        volumeInfoJSON.getString(PUBLISHER),
+                        volumeInfoJSON.getString(PUBLISHED_DATE));
+                books.add(book);
             }
         }
         catch (JSONException e){
