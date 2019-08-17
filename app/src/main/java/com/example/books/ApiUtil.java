@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ApiUtil {
@@ -58,6 +59,18 @@ public class ApiUtil {
         finally {
             connection.disconnect();
         }
+    }
+
+    public  static ArrayList<Book> getBooksFromJson(){
+        final  String ID = "id";
+        final String TITLE = "title";
+        final String SUBTITLE= "subtitle";
+        final  String AUTHORS = "authors";
+        final String PUBLISHER = "publisher";
+        final String PUBLISHED_DATE = "publisheddate";
+        final String ITEMS = "items";
+        ArrayList<Book> books=null;
+        return books;
     }
     }
 
