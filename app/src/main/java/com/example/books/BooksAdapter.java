@@ -7,9 +7,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHolder> {
 
+    ArrayList<Book> books;
+    public BooksAdapter(ArrayList<Book> books){
 
+    }
     @Override
     public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return null;
