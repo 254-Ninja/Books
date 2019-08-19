@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class BooksAdapter {
 
-    public class BookViewHolder extends RecyclerView.ViewHolder{
+    public class BookViewHolder extends RecyclerView.ViewHolder<BooksAdapter.BookViewHolder>{
 
         TextView tvTitle;
         TextView tvtAuthors;
@@ -33,6 +33,9 @@ public class BooksAdapter {
                     authors+=", ";
                 }
             }
+            tvtAuthors.setText(authors);
+            tvDate.setText(book.publisherData);
+            tvPublisher.setText(book.publishers);
 
         }
     }
