@@ -27,12 +27,14 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
     @Override
     public void onBindViewHolder(BookViewHolder holder, int position) {
+        Book book = books.get(position);
+        holder.bind(book);
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return books.size();
     }
 
     public class BookViewHolder extends RecyclerView.ViewHolder{
