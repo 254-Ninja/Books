@@ -21,6 +21,18 @@ public class BooksAdapter {
             tvDate = (TextView) itemView.findViewById(R.id.tvPublishedDate);
             tvPublisher = (TextView)itemView.findViewById(R.id.tvPublisher);
 
+        }
+        public  void bind (Book book) {
+            tvTitle.setText(book.title);
+            String authors="";
+            int i=0;
+            for (String author:book.authors){
+                authors+=author;
+                i++;
+                if(i<book.authors.length){
+                    authors+=", ";
+                }
+            }
 
         }
     }
