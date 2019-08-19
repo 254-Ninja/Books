@@ -1,5 +1,7 @@
 package com.example.books;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,11 +15,14 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
     ArrayList<Book> books;
     public BooksAdapter(ArrayList<Book> books){
-
+        this.books = books;
     }
     @Override
     public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        Context context = parent.getContext();
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.book_list_item, parent, false);
+        return new BookViewHolder(itemView);
     }
 
     @Override
