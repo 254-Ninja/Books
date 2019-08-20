@@ -1,13 +1,17 @@
 package com.example.books;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,17 +19,17 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
-public class BookListActivity extends AppCompatActivity {
+public class BookListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private ProgressBar mLoadingProgress;
     private RecyclerView rvBooks;
     URL bookUrl;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
-        setContentView(R.layout.activity_book_list);
+        rvBooks = (RecyclerView) findViewById(R.id.rv_books);
         mLoadingProgress = (ProgressBar) findViewById(R.id.pb_loading);
         Intent intent = getIntent();
         String query = intent.getStringExtra("query");
@@ -39,15 +43,18 @@ public class BookListActivity extends AppCompatActivity {
             }
             new BooksQueryTask().execute(bookUrl);
 
-        } catch (Exception e) {
-
+        }
+        catch (Exception e) {
             Log.d("error", e.getMessage());
         }
+
+        //create the layoutManager for the books (linear in this case, scrolling vertically
         LinearLayoutManager booksLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvBooks.setLayoutManager(booksLayoutManager);
-    }
 
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.book_list_menu, menu);
@@ -113,7 +120,7 @@ public class BookListActivity extends AppCompatActivity {
         return false;
     }
 
-    public class BooksQueryTask extends AsyncTask<URL, Void, String>{
+    public class BooksQueryTask extends AsyncTask<URL, Void, String> {
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -121,7 +128,8 @@ public class BookListActivity extends AppCompatActivity {
             String result = null;
             try {
                 result = ApiUtil.getJson(searchURL);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 Log.e("Error", e.getMessage());
             }
             return result;
@@ -129,23 +137,22 @@ public class BookListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-           // TextView tvResult = (TextView) findViewById(R.id.tvResponse);
+
             TextView tvError = (TextView) findViewById(R.id.tv_error);
             mLoadingProgress.setVisibility(View.INVISIBLE);
             if (result == null) {
-                tvResult.setVisibility(View.INVISIBLE);
+                rvBooks.setVisibility(View.INVISIBLE);
                 tvError.setVisibility(View.VISIBLE);
             }
             else {
-                tvResult.setVisibility(View.VISIBLE);
+                rvBooks.setVisibility(View.VISIBLE);
                 tvError.setVisibility(View.INVISIBLE);
             }
             ArrayList<Book> books = ApiUtil.getBooksFromJson(result);
             String resultString = "";
-            for (Book book : books) {
-                resultString = resultString + book.title + "\n" + book.publisherData + "\n\n";
-            }
-            tvResult.setText(resultString);
+
+            BooksAdapter adapter = new BooksAdapter(books);
+            rvBooks.setAdapter(adapter);
         }
 
         @Override
@@ -154,6 +161,4 @@ public class BookListActivity extends AppCompatActivity {
             mLoadingProgress.setVisibility(View.VISIBLE);
         }
     }
-
-    }
-
+}
