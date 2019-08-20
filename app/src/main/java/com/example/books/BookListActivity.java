@@ -1,7 +1,10 @@
 package com.example.books;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +18,8 @@ import java.util.ArrayList;
 
 public class BookListActivity extends AppCompatActivity {
     private ProgressBar mLoadingProgress;
+    private RecyclerView rvBooks;
+    URL bookUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +27,92 @@ public class BookListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book_list);
         setContentView(R.layout.activity_book_list);
         mLoadingProgress = (ProgressBar) findViewById(R.id.pb_loading);
+        Intent intent = getIntent();
+        String query = intent.getStringExtra("query");
+
         try {
-            URL bookUrl = ApiUtil.buildUrl("cooking");
+            if (query == null  || query.isEmpty()) {
+                bookUrl = ApiUtil.buildUrl("cooking");
+            }
+            else {
+                bookUrl = new URL(query);
+            }
             new BooksQueryTask().execute(bookUrl);
 
         } catch (Exception e) {
 
             Log.d("error", e.getMessage());
         }
+        LinearLayoutManager booksLayoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvBooks.setLayoutManager(booksLayoutManager);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.book_list_menu, menu);
+        final MenuItem searchItem=menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+        //recent searches
+        ArrayList<String> recentList = SpUtil.getQueryList(getApplicationContext());
+        int itemNum = recentList.size();
+        MenuItem recentMenu;
+        for (int i = 0; i<itemNum; i++) {
+            recentMenu = menu.add(Menu.NONE, i, Menu.NONE, recentList.get(i));
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_advanced_search:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                int position = item.getItemId() + 1 ;
+                String preferenceName = SpUtil.QUERY + String.valueOf(position);
+                String query = SpUtil.getPreferenceString(getApplicationContext(), preferenceName);
+                String[] prefParams = query.split("\\,");
+                String[] queryParams = new String[4];
+
+                for (int i=0; i<prefParams.length;i++) {
+                    queryParams[i] = prefParams[i];
+                }
+
+
+                bookUrl = ApiUtil.buildUrl(
+                        (queryParams[0] == null)?"" : queryParams[0],
+                        (queryParams[1] == null)?"" : queryParams[1],
+                        (queryParams[2] == null)?"" : queryParams[2],
+                        (queryParams[3] == null)?"" : queryParams[3]
+                );
+                new BooksQueryTask().execute(bookUrl);
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        try {
+            URL bookUrl = ApiUtil.buildUrl(query);
+            new BooksQueryTask().execute(bookUrl);
+        }
+        catch (Exception e) {
+            Log.d("error", e.getMessage());
+        }
+
+
+        return false;
+    }
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
     public class BooksQueryTask extends AsyncTask<URL, Void, String>{
 
         @Override
@@ -47,7 +129,7 @@ public class BookListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            TextView tvResult = (TextView) findViewById(R.id.tvResponse);
+           // TextView tvResult = (TextView) findViewById(R.id.tvResponse);
             TextView tvError = (TextView) findViewById(R.id.tv_error);
             mLoadingProgress.setVisibility(View.INVISIBLE);
             if (result == null) {
