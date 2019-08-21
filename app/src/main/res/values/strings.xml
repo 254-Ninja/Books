@@ -8,6 +8,7 @@
     <string name="hint_author">Insert Author(s)</string>
     <string name="hint_publisher">Insert Publisher</string>
     <string name="hint_isbn">Insert ISBN</string>
+    <string name="image">image</string>
 
 
 </resources>

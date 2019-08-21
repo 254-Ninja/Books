@@ -59,7 +59,7 @@ public class BookListActivity extends AppCompatActivity implements SearchView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.book_list_menu, menu);
         final MenuItem searchItem=menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        final SearchView searchView =  (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);
         //recent searches
         ArrayList<String> recentList = SpUtil.getQueryList(getApplicationContext());
