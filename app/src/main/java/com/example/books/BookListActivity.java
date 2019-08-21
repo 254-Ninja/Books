@@ -50,7 +50,7 @@ public class BookListActivity extends AppCompatActivity implements SearchView.On
 
         //create the layoutManager for the books (linear in this case, scrolling vertically
         LinearLayoutManager booksLayoutManager =
-                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvBooks.setLayoutManager(booksLayoutManager);
 
 
