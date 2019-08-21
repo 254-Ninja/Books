@@ -13,9 +13,9 @@ public class BookDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityBookDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_book_detail);
-        Book book= getIntent().getParcelableExtra("Book");
-        binding.setBook(book);
+        setContentView(R.layout.activity_book_details);
+        Book book = getIntent().getParcelableExtra("Book");
+
     }
 
 
