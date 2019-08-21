@@ -106,6 +106,7 @@ public class ApiUtil {
         final String IMAGEINFO = "imageLinks";
         final String THUMBNAIL = "thumbnail";
 
+
         ArrayList<Book> books = new ArrayList<Book>();
         try {
             JSONObject jsonBooks = new JSONObject(json);
@@ -137,10 +138,9 @@ public class ApiUtil {
                         volumeInfoJSON.getString(TITLE),
                         (volumeInfoJSON.isNull(SUBTITLE)?"":volumeInfoJSON.getString(SUBTITLE)),
                         authors,
-                        (volumeInfoJSON.isNull(PUBLISHER)?"":volumeInfoJSON.getString(PUBLISHER)),
-                        (volumeInfoJSON.isNull(PUBLISHED_DATE)?"":volumeInfoJSON.getString(PUBLISHED_DATE)),
-                        (volumeInfoJSON.isNull(DESCRIPTION)?"":volumeInfoJSON.getString(DESCRIPTION)),
-                        (imageLinksJSON==null)?"":imageLinksJSON.getString(THUMBNAIL));
+                        volumeInfoJSON.getString(PUBLISHER),
+                        volumeInfoJSON.getString(PUBLISHED_DATE),
+                        volumeInfoJSON.getString(DESCRIPTION));
                 books.add(book);
             }
         }

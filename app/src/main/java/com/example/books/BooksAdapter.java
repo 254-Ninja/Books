@@ -61,19 +61,10 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         }
         public void bind (Book book) {
             tvTitle.setText(book.title);
-            String authors="";
-            int i=0;
-            /*for (String author:book.authors.get()) {
-                authors+=author;
-                i++;
-                if(i<book.authors.get().length) {
-                    authors+=", ";
-                }
-            }*/
 
-            tvAuthors.setText(book.authors.get());
-            tvDate.setText(book.publishedDate.get());
-            tvPublisher.setText(book.publisher.get());
+            tvAuthors.setText(book.authors);
+            tvDate.setText(book.publishedData);
+            tvPublisher.setText(book.publisher);
         }
 
 
